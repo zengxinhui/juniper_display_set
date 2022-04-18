@@ -6,8 +6,7 @@
 ;; [^\n;{}]+ matches any line
 ;; ;|\{|} matches ; or { or }
 
-(if (not= 1 (count *command-line-args*))
-  (println "Usage: clj conv.clj <filename>")
+(defn process [s]
   (let [f (fn [{:keys [tags temp lines] :as r} piece]
             (cond
               (= [\/ \*] (take 2 piece)) (-> r
@@ -30,9 +29,12 @@
                       (:anno-msg r) (update :anno conj (str "annotate " piece (:anno-msg r)))
                       :then (dissoc :anno-msg)
                       :then (update :temp #(if % (str % " " piece) piece)))))
-        {:keys [lines anno]} (->> (slurp (first *command-line-args*))
-                                  (re-seq #"/\*.*?\*/|#[^\n]+\n|[^\n;{}]+|;|\{|}")
+        {:keys [lines anno]} (->> (re-seq #"/\*.*?\*/|#[^\n]+\n|[^\n;{}]+|;|\{|}" s)
                                   (map s/trim)
                                   (remove #{""})
                                   (reduce f {:tags [], :anno [], :lines [], :temp nil}))]
-    (->> (lazy-cat lines anno) (s/join "\n") println)))
+    (->> (lazy-cat lines anno) (s/join "\n"))))
+
+(if (= 1 (count *command-line-args*))
+  (->> (first *command-line-args*) slurp process println)
+  (println "Usage: clj conv.clj <filename>"))
