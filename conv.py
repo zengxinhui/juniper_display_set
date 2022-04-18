@@ -16,7 +16,7 @@ def process(data):
     for elem in re.findall(r"/\*.*?\*/|#[^\n]+\n|[^\n;{}]+|;|\{|}", data):
         elem = elem.strip()
 
-        if elem[0] == '#':
+        if elem == '' or elem[0] == '#':
             continue
         elif elem[0:2] == '/*':
             lannotations.append("top")
