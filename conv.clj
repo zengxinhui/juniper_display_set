@@ -7,7 +7,7 @@
 ;; ;|\{|} matches ; or { or }
 
 (defn process [s]
-  (let [f (fn [{:keys [tags temp lines] :as r} piece]
+  (let [f (fn [{:keys [tags temp] :as r} piece]
             (cond
               (= [\/ \*] (take 2 piece)) (-> r
                                              (update :anno conj "top")
