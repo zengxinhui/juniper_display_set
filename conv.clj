@@ -1,6 +1,11 @@
 (ns conv
   (:require [clojure.string :as s]))
 
+;; /\*.*?\*/ matches annotate
+;; #[^\n]+\n matches ignored comment
+;; [^\n;{}]+ matches any line
+;; ;|\{|} matches ; or { or }
+
 (if (not= 1 (count *command-line-args*))
   (println "Usage: clj conv.clj <filename>")
   (let [f (fn [{:keys [tags temp lines] :as r} piece]
