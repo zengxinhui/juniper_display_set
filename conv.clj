@@ -9,10 +9,10 @@
 (defn process [s]
   (let [f (fn [{:keys [tags temp] :as r} piece]
             (cond
-              (= [\/ \*] (take 2 piece)) (-> r
-                                             (update :anno conj "top")
-                                             (update :anno conj (s/join " " (cons "edit" tags)))
-                                             (assoc :anno-msg (str " \"" (subs piece 3 (- (count piece) 3)) "\"")))
+              (= [\/ \*] (take 2 piece)) (cond-> r
+                                           :do (update :anno conj "top")
+                                           :do (assoc :anno-msg (str " \"" (subs piece 3 (- (count piece) 3)) "\""))
+                                           (< 0 (count tags)) (update :anno conj (s/join " " (cons "edit" tags))))
               (= \# (first piece)) r
               (= "{" piece) (-> r (update :tags conj temp) (assoc :temp nil))
               (= "}" piece) (-> r (update :tags pop))
@@ -35,6 +35,6 @@
                                   (reduce f {:tags [], :anno [], :lines [], :temp nil}))]
     (->> (lazy-cat lines anno) (s/join "\n"))))
 
-(if (= 1 (count *command-line-args*))
-  (->> (first *command-line-args*) slurp process println)
-  (println "Usage: clj conv.clj <filename>"))
+(if (not= 1 (count *command-line-args*))
+  (println "Usage: clj conv.clj <filename>")
+  (->> (first *command-line-args*) slurp process println))
