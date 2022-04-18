@@ -53,4 +53,4 @@ def process(data):
 if len(sys.argv) != 2:
     print("Usage: python conv.py <filename>")
 else:
-    process(open(sys.argv[1], 'r').read()
+    process(open(sys.argv[1], 'r').read())
