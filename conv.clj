@@ -28,8 +28,8 @@
                                                             (assoc :temp (subs piece 9)))
               :else (cond-> r
                       (:anno-msg r) (update :anno conj (str "annotate " piece (:anno-msg r)))
-                      :else (dissoc :anno-msg)
-                      :else (update :temp #(if % (str % " " piece) piece)))))
+                      :then (dissoc :anno-msg)
+                      :then (update :temp #(if % (str % " " piece) piece)))))
         {:keys [lines anno]} (->> (slurp (first *command-line-args*))
                                   (re-seq #"/\*.*?\*/|#[^\n]+\n|[^\n;{}]+|;|\{|}")
                                   (map s/trim)
