@@ -20,25 +20,25 @@ def process(data):
             continue
         elif elem[0:2] == '/*':
             lannotations.append("top")
-            lannotations.append("edit " + " ".join(ltags))
-            annotation = '"' + elem[3:-3] + '"'
+            lannotations.append(f'edit {" ".join(ltags)}')
+            annotation = f'"{elem[3:-3]}"'
         elif elem[0] == '{':
             ltags.append(temp)
             temp = ''
         elif elem[0] == '}':
             ltags.pop()
         elif elem[0] == ';':
-            lconfig.append("set "        + " ".join(ltags) + " " + temp)
+            lconfig.append(f'set {" ".join(ltags)} {temp}')
             temp = ''
         elif elem[0:9] == 'inactive:':
-            lconfig.append("deactivate " + " ".join(ltags) + " " + elem[10:])
+            lconfig.append(f'deactivate {" ".join(ltags)} {elem[10:]}')
             temp = elem[10:]
         elif elem[0:8] == 'protect:':
-            lconfig.append("protect "    + " ".join(ltags) + " " + elem[9:])
+            lconfig.append(f'protect {" ".join(ltags)} {elem[9:]}')
             temp = elem[9:]
         else:
             if annotation:
-                lannotations.append("annotate " + elem + " " + annotation)
+                lannotations.append(f'annotate {elem} {annotation}')
                 annotation = ''
             if temp:
                 temp = temp + " " + elem
