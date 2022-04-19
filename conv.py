@@ -20,7 +20,8 @@ def process(data):
             continue
         elif elem[0:2] == '/*':
             lannotations.append("top")
-            lannotations.append(f'edit {" ".join(ltags)}')
+            if len(ltags) > 0:
+                lannotations.append(f'edit {" ".join(ltags)}')
             annotation = f'"{elem[3:-3]}"'
         elif elem[0] == '{':
             ltags.append(temp)
