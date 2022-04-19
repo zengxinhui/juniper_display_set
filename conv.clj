@@ -35,6 +35,6 @@
                                   (reduce f {:tags [], :anno [], :lines [], :temp nil}))]
     (->> (lazy-cat lines anno) (s/join "\n"))))
 
-(if (not= 1 (count *command-line-args*))
-  (println "Usage: clj conv.clj <filename>")
-  (->> (first *command-line-args*) slurp process println))
+(if (= 1 (count *command-line-args*))
+  (->> (first *command-line-args*) slurp process println)
+  (println "Usage: clj conv.clj <filename>"))
